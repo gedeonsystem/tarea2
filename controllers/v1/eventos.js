@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { query, validationResult } = require("express-validator");
 
-/* Models */
 const Eventos = require("../../models/eventos");
 
 let eventos = [];
@@ -20,6 +19,49 @@ router.get("/", (req, res) => {
     });
   });
 });
+
+router.get(
+  "/pag",
+  query("pagina").notEmpty(),
+  query("paso").notEmpty(),
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(200).json({
+        code: "PF",
+        message: "pagina y paso es requerido",
+        errors: errors.array(),
+      });
+    }
+    console.log(
+      "Log: [Metodo: GET] , [url:/api/eventos/pag] hora",
+      new Date().getHours(),
+      "query:",
+      req.query
+    );
+
+    const pagina = parseInt(req.query.pagina);
+    const paso = parseInt(req.query.paso);
+
+    return Eventos.findEventosPaginados(pagina, paso, (err, eventos) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ code: "ER", message: "Error al obtener los evento!" });
+      }
+      if (!evento) {
+        return res
+          .status(404)
+          .json({ code: "NF", message: "Eventos no Encontrados" });
+      }
+      res.json({
+        code: "OK",
+        message: "Eventos Disponible!",
+        data: { eventos },
+      });
+    });
+  }
+);
 
 router.get("/query", query("id").notEmpty(), (req, res) => {
   const errors = validationResult(req);

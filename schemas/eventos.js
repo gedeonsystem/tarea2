@@ -63,8 +63,20 @@ const findAllEventos = (callback) => {
     });
 };
 
+const findEventosPaginados = (pagina, paso, callback) => {
+  Evento.find()
+    .then((results) => {
+      console.log(" Todos los Eventos:", results);
+      return callback(null, results);
+    })
+    .catch((err) => {
+      console.error(err);
+      return callback(err);
+    });
+};
+
 const findEventoById = (id, callback) => {
-  User.findOne({ id })
+  Evento.findOne({ id })
     .then((result) => {
       console.log(" Encontrado:", result);
       return callback(null, result);
@@ -77,7 +89,7 @@ const findEventoById = (id, callback) => {
 };
 
 const updateEvento = (id, evento, callback) => {
-  User.findOneAndUpdate({ id }, evento, { new: true })
+  Evento.findOneAndUpdate({ id }, evento, { new: true })
     .then((result) => {
       console.log(" Actualizado:", result);
       return callback(null, result);
@@ -94,4 +106,5 @@ module.exports = {
   findAllEventos,
   findEventoById,
   updateEvento,
+  findEventosPaginados,
 };
