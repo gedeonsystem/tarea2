@@ -67,7 +67,7 @@ const findEventosPaginados = (pagina, paso, callback) => {
   Evento.find()
     .then((results) => {
       console.log(" Todos los Eventos:", results);
-      return callback(null, results);
+      return callback(null, results.slice(pagina * paso, (pagina + 1) * paso));
     })
     .catch((err) => {
       console.error(err);
