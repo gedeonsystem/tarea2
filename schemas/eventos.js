@@ -62,7 +62,7 @@ const findAllEventos = (callback) => {
       return callback(err);
     });
 };
-
+//tarea 2
 const findEventosPaginados = (pagina, paso, callback) => {
   Evento.find()
     .then((results) => {
